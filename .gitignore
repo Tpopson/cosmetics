@@ -7,3 +7,4 @@ venv
 # db.sqlite3
 # db.sqlite3-journal
 # media
+ssh -i "avengers.pem" ubuntu@ec2-54-175-228-118.compute-1.amazonaws.com
