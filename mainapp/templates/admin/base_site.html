@@ -1,0 +1,15 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block branding %}
+<a href=""><img src="{% static '' %}img/favicon-96x96.png" style="width: 100px;"></a>
+
+
+
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}"> 
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static '' %}img/favicon-96x96.png"> 
+{% endblock extrastyle %}
+    
+
+{% endblock branding %}
