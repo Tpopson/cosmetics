@@ -41,7 +41,7 @@
           <li class="nav-item">
             <a href="{% url 'cart:mycart' %}" class="nav-link active">
                 {% if itemcount > 0 %}
-                    <span class="badge shopbag">
+                    <span class="badge bg-white shopbag text-warning">
                         <i class="fa-solid fa-basket-shopping"></i>
                         <span class="badge shopbas">{{itemcount}}</span>
                     </span>

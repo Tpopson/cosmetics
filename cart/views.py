@@ -58,6 +58,11 @@ def mycart(request):
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
     orderitem = OrderItem.objects.filter(order=order, complete=False)
     
+    itemcount = 0
+
+    for item in orderitem:
+        itemcount += item.order_item
+
     subtotal = 0
     vat = 0
     total = 0
@@ -72,6 +77,7 @@ def mycart(request):
 
     context = {
         'customer':customer,
+        'itemcount':itemcount,
         'orderitem':orderitem,
         'subtotal':subtotal,
         'vat':vat,
@@ -211,6 +217,11 @@ def checkout(request):
     orderitem  = OrderItem.objects.filter(order=order, complete=False)
     profile = Profile.objects.get(user__username = request.user.username)
 
+    itemcount = 0
+
+    for item in orderitem:
+        itemcount += item.order_item
+
     subtotal = 0
     vat = 0
     total = 0
@@ -226,6 +237,7 @@ def checkout(request):
 
     context = {
         'orderitem':orderitem,
+        'itemcount':itemcount,
         'profile':profile,
         'total':total,
     }
@@ -295,15 +307,15 @@ def payment(request):
             ship.state = state
             ship.save() 
 
-            email = EmailMessage(
-                'Order confirmation',#message Title
-                f'Dear {fname}, your order is confirmed! \n Your delivery is in one hour. \n Thank you for your patronage.',#content
-                settings.EMAIL_HOST_USER, #compay email
-                [new_email]#client email
-                )
+            #email = EmailMessage(
+                #'Order confirmation',#message Title
+                #f'Dear {fname}, your order is confirmed! \n Your delivery is in one hour. \n Thank you for your patronage.',#content
+                #settings.EMAIL_HOST_USER, #compay email
+                #[new_email]#client email
+                #)
             
-            email.fail_silently = True
-            email.send()
+            #email.fail_silently = True
+            #email.send()
 
             return redirect(rurl)
     return redirect(url)

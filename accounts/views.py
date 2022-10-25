@@ -21,6 +21,7 @@ from django.utils.encoding import force_bytes
 
 from .models import Profile
 from .forms import SignupForm, ProfileForm, PasswordForm, RestPasswordForm
+from cart.models import *
 
 
 # Create your views here.
@@ -76,8 +77,22 @@ def signup(request):
 def profile(request):
     profile = Profile.objects.get(user__username = request.user.username)
 
+    try:
+        customer = request.user.customer
+    except:
+        device = request.COOKIES['device']
+        customer, created = Customer.objects.get_or_create(device=device)
+
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    orderitem = OrderItem.objects.filter(order=order, complete=False)
+
+    itemcount = 0
+
+    for item in orderitem:
+        itemcount += item.order_item
     context = {
-        'profile':profile
+        'profile':profile,
+        'itemcount':itemcount,
     }
     return render(request, 'profile.html', context)
 
@@ -98,9 +113,24 @@ def profile_update(request):
             messages.error(request, update.errors)
             return redirect('accounts:profile_update')
 
+    try:
+        customer = request.user.customer
+    except:
+        device = request.COOKIES['device']
+        customer, created = Customer.objects.get_or_create(device=device)
+
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    orderitem = OrderItem.objects.filter(order=order, complete=False)
+
+    itemcount = 0
+
+    for item in orderitem:
+        itemcount += item.order_item
+
     context = {
         'profile':profile,
         'update':update,
+        'itemcount':itemcount,
     }
     return render(request, 'profile_update.html', context)
 
@@ -123,9 +153,24 @@ def change_password(request):
             messages.error(request, form.errors)
             return redirect('accounts:password')
 
+    try:
+        customer = request.user.customer
+    except:
+        device = request.COOKIES['device']
+        customer, created = Customer.objects.get_or_create(device=device)
+
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    orderitem = OrderItem.objects.filter(order=order, complete=False)
+
+    itemcount = 0
+
+    for item in orderitem:
+        itemcount += item.order_item
+
     context = {
         'profile':profile,
         'form':form,
+        'itemcount':itemcount,
     }
     return render(request, 'password_change.html', context)
 # user profile done
@@ -143,8 +188,8 @@ def password_reset_request(request):
 					email_template_name = "password/password_reset_email.txt"
 					c = {
 					"email":user.email,
-					'domain':'54.175.228.118',
-					# 'domain':'127.0.0.1:8000',
+					# 'domain':'54.175.228.118',
+					'domain':'127.0.0.1:8000',
 					'site_name': 'Avengers',
 					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
 					"user": user,
