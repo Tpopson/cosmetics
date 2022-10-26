@@ -8,23 +8,8 @@ from cart.models import *
 def index(request):
     categories = Category.objects.all().order_by('-id')[:4]
 
-    try:
-        customer = request.user.customer
-    except:
-        device = request.COOKIES['device']
-        customer, created = Customer.objects.get_or_create(device=device)
-
-    order, created = Order.objects.get_or_create(customer=customer, complete=False)
-    orderitem = OrderItem.objects.filter(order=order, complete=False)
-
-    itemcount = 0
-
-    for item in orderitem:
-        itemcount += item.order_item
-
     context = {
         'categories':categories,
-        'itemcount':itemcount,
     }
     return render(request, 'index.html', context)
 
