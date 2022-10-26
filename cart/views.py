@@ -75,8 +75,6 @@ def mycart(request):
 
     total = vat + subtotal
 
-    if request.user:
-       profile = Profile.objects.get(user__username = request.user.username) 
     context = {
         'customer':customer,
         'itemcount':itemcount,
@@ -84,7 +82,6 @@ def mycart(request):
         'subtotal':subtotal,
         'vat':vat,
         'total':total,
-        'profile':profile,
     }
     return render(request, 'cart.html', context)
 
@@ -310,15 +307,15 @@ def payment(request):
             ship.state = state
             ship.save() 
 
-            #email = EmailMessage(
-                #'Order confirmation',#message Title
-                #f'Dear {fname}, your order is confirmed! \n Your delivery is in one hour. \n Thank you for your patronage.',#content
-                #settings.EMAIL_HOST_USER, #compay email
-                #[new_email]#client email
-                #)
+            email = EmailMessage(
+                'Order confirmation',#message Title
+                f'Dear {fname}, your order is confirmed! \n Your delivery is in one hour. \n Thank you for your patronage.',#content
+                settings.EMAIL_HOST_USER, #compay email
+                [new_email]#client email
+                )
             
-            #email.fail_silently = True
-            #email.send()
+            email.fail_silently = True
+            email.send()
 
             return redirect(rurl)
     return redirect(url)
