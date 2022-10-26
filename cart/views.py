@@ -75,6 +75,8 @@ def mycart(request):
 
     total = vat + subtotal
 
+    if request.user:
+       profile = Profile.objects.get(user__username = request.user.username) 
     context = {
         'customer':customer,
         'itemcount':itemcount,
@@ -82,6 +84,7 @@ def mycart(request):
         'subtotal':subtotal,
         'vat':vat,
         'total':total,
+        'profile':profile,
     }
     return render(request, 'cart.html', context)
 

@@ -169,8 +169,8 @@
               </div>
             </div>
             <!--  -->
-            
-            {% if request.user.is_authenticated %}
+              
+          {% if request.user.is_authenticated %}
             <div class="accordion-item">
               <h2 class="accordion-header" id="headingTwo">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -192,7 +192,7 @@
                       </div>
                       <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">email address</label>
-                        <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input type="email" name="email" value="{{profile.email}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                       </div>
                       <div class="mb-3">
                         <label for="exampleInputText1" class="form-label">order address</label>
@@ -277,7 +277,7 @@
               </div>
             </div>
             <!--  -->
-            {% endif %}
+          {% endif %}
           </div>
           <span ><a style="color: pink;" href="{% url 'accounts:signin' %}">SignIn</a></span>
         </div>
